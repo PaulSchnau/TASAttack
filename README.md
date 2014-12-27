@@ -2,8 +2,8 @@
 This was built upon [Hackathon Starter](https://github.com/sahat/hackathon-starter). You should review its structure. You will need a Mongo instance and place its connection information in config/secrets.js. If you want to use Twitch and Twitter apis, you will need to register and app with both of them.
 
 ##Models
-There’s two main Models used by Mongoose: Poll and Game.
-Games are scraped from tasvideos.org. Game creation is done by the gameScrape.js worker. You can initiate the scrape on startup by uncommenting the initiation of gameScrape.js in app.js.
+There’s two main Models used by Mongoose: Poll and Run.
+Games are scraped from tasvideos.org. Run creation is done by the gameScrape.js worker. You can initiate the scrape on startup by uncommenting the initiation of gameScrape.js in app.js.
 
 Polls contain the data sent to the client. Poll creation is done by the election.js worker. Only one Poll is active at a time. Polls contain the currently playing run's information as well as the information for the three candidates.
 
