@@ -40,7 +40,7 @@ function endPoll(){
     console.log('Ending Poll');
     var nextGameIndex = 0;
     for (i = 1; i < currentPoll.votesPerRun.length; i++) {
-        if(currentPoll.votesPerRun[i] > currentPoll.votesPerRun[i-1]){
+        if(currentPoll.votesPerRun[i] > currentPoll.votesPerRun[nextGameIndex]){
             nextGameIndex = i;
         }
     }
@@ -58,7 +58,7 @@ function endPoll(){
 
 //Get active active poll, else 
 Poll.findOne({endsAt : { $gte : Date.now() }})
-.sort('-created')
+.sort('created')
 .populate('runs')
 .populate('currentRun')
 .exec(function(err, oldPoll) {
