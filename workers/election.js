@@ -10,9 +10,11 @@ var currentPoll; //Contains all game data, sent to clients.
 var currentPollUnpopulated; //Contains only _id referenes. This is what gets saved in the database.
 var newPollTimeout;
 var eventEmitter = new events.EventEmitter();
+var isPollBeingCreated = false;
 
 function createPoll(currentRun){
     console.log('Creating new Poll');
+    isPollBeingCreated = true;
     var newPoll = new Poll();
     newPoll.currentRun = currentRun;
     newPoll.endsAt = new Date(Date.now() + currentRun.realTime);
@@ -27,6 +29,7 @@ function createPoll(currentRun){
                 newPoll.populate('runs currentRun', function(err, newPopulatedPoll){
                     currentPoll = newPoll;
                     currentPollUnpopulated = newPoll.save(); // This loses the populated fields (runs and currentRun)
+                    isPollBeingCreated = false;
                     newPollTimeout = setTimeout(function(){
                         endPoll()
                     }, newPoll.endsAt.getTime() - Date.now() - 2000);
@@ -56,9 +59,9 @@ function endPoll(){
     currentPollUnpopulated.save();  
 }
 
-//Get active active poll, else 
+//Get active active poll, else make one.
 Poll.findOne({endsAt : { $gte : Date.now() }})
-.sort('created')
+.sort('-created')
 .populate('runs')
 .populate('currentRun')
 .exec(function(err, oldPoll) {
@@ -115,7 +118,7 @@ client.addListener('chat', function (channel, userData, message) {
             currentPollUnpopulated.save();
             console.log(userLower + ' votes to skip');
 
-            if (currentPoll.skipsTotal >= (currentPoll.votesTotal / 2) + 2 ){
+            if (currentPoll.skipsTotal >= (currentPoll.votesTotal / 2) + 2  && !isPollBeingCreated){
                 clearTimeout(newPollTimeout);
                 endPoll();
             }
