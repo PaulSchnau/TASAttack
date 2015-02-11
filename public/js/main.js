@@ -9,7 +9,7 @@ myApp.constant('YT_event', {
 
 myApp.controller('MainCtrl', ['$scope', '$interval', '$window', function($scope, $interval, $window, youtubeEmbedUtils) {
     $scope.videoHeight = function(){
-        return $window.innerHeight / 10 * 6
+        return $window.innerHeight / 10 * 8
     }
 
     $scope.videoHeightNoChat = function(){
@@ -19,6 +19,7 @@ myApp.controller('MainCtrl', ['$scope', '$interval', '$window', function($scope,
     $scope.$on('youtube.player.ready', function ($event, player) {
         $scope.position = Math.floor(($scope.currentPoll.currentRun.realTime - $scope.timeLeft )/1000);
         $scope.videoPlayer.seekTo($scope.position, true);
+        $scope.videoPlayer.cc_load_policy = 1;
     });
 
     $scope.$on('youtube.player.playing', function ($event, player) {

@@ -10,16 +10,18 @@ block content
       h2 {{currentPoll.currentRun.game}} 
       h4 Run by {{currentPoll.currentRun.runners.join(', ')}} 
       h4 {{currentPoll.currentRun.timeFormatted}} {{currentPoll.currentRun.catagory}}
-      hr
-      h5 {{currentPoll.currentRun.description}}
+      h4 tasvideos.org/{{currentPoll.currentRun.id}}.html
     div.col-md-5
-      div(ng-repeat="run in currentPoll.runs")
-        h4 {{$index + 1}}. {{run.game}} 
-        h5 {{run.runners.join(', ')}} - {{run.timeFormatted}} {{run.catagory}}
+      div.col-md-4(ng-repeat="run in currentPoll.runs")
+        h5 {{$index + 1}}. {{run.game}} 
+        h6 {{run.runners.join(', ')}} - {{run.timeFormatted}} {{run.catagory}}
         span.badge.alert-info(style='padding: 3px; float: left; width: 50px; text-align: center;') {{currentPoll.votesPerRun[$index]}}
         .progress(style="height:20px")
           .progress-bar.progress-bar-striped.progress-bar-info(role='progressbar', aria-valuenow="{{currentPoll.votesPerRun[$index]}}", ng-style="{width : ( currentPoll.votesPerRun[$index] / currentPoll.votesTotal * 100 + '%' ) }") 
-      h4 Time until next: {{timeLeft | date:'HH:mm:ss' : 'UTC'}}
-      h4 Votes to skip: {{currentPoll.skipsTotal}} / {{currentPoll.votesTotal / 2 + 2}}
+      div.col-md-12
+        h5 Time until next: {{timeLeft | date:'HH:mm:ss' : 'UTC'}} Votes to skip: {{currentPoll.skipsTotal}} / {{currentPoll.votesTotal / 2 + 2}}
+        h5 
+    div.col-md-9
+      h5 {{currentPoll.currentRun.description}}
     
       

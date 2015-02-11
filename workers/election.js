@@ -50,18 +50,20 @@ function endPoll(){
     currentPoll.winner = currentPoll.runs[nextGameIndex]._id;
     currentPoll.populate('winner', function(err, newPopulatedPoll){
         createPoll(newPopulatedPoll.winner);
-        twitterString = (newPopulatedPoll.winner.game + ' ' + newPopulatedPoll.winner.catagory + ' in ' + newPopulatedPoll.winner.timeFormatted + ' by ' + newPopulatedPoll.winner.runners.join(', ') + ' tasattack.com twitch.tv/tasattack').replace(/ +(?= )/g,'');
+        twitterString = (newPopulatedPoll.winner.game + ' ' + newPopulatedPoll.winner.catagory + ' in ' + newPopulatedPoll.winner.timeFormatted + ' by ' + newPopulatedPoll.winner.runners.join(', ') + ' tasvideos.org/'+currentPoll.winner.id+'.html twitch.tv/tasattack').replace(/ +(?= )/g,'');
         twitterPoster.post('statuses/update', { status: twitterString}, function(err, data, response) {
         });
         twitchPoster.postTwitchGame(newPopulatedPoll.winner.game);
+        client.say('tasattack', 'Now Playing ' + newPopulatedPoll.winner.game +
+                   ' ' + newPopulatedPoll.winner.catagory + ' in ' + newPopulatedPoll.winner.timeFormatted +
+                   ' by ' + newPopulatedPoll.winner.runners.join(', ') + ' tasvideos.org/'+currentPoll.winner.id+'.html');
     });
     currentPollUnpopulated = currentPoll;
     currentPollUnpopulated.save();  
 }
 
 //Get active active poll, else make one.
-Poll.findOne({endsAt : { $gte : Date.now() }})
-.sort('-created')
+Poll.findOne({endsAt : { $gte : Date.now() }}, null, {sort: {created: -1}})
 .populate('runs')
 .populate('currentRun')
 .exec(function(err, oldPoll) {
@@ -110,7 +112,7 @@ client.addListener('chat', function (channel, userData, message) {
 
     } else if (messageLower == 'skip') {
 
-        if (Date.now()+45000 > currentPoll.createdAt.getTime()){
+        if (Date.now()-45000 > currentPoll.createdAt.getTime()){
             currentPoll.skips[userLower] = 1;
             currentPoll.markModified('skips');
             currentPoll.sumSkips();

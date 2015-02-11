@@ -8,6 +8,7 @@ block content
       h2 {{currentPoll.currentRun.game}} 
       h4 Run by {{currentPoll.currentRun.runners.join(', ')}} 
       h4 {{currentPoll.currentRun.timeFormatted}} {{currentPoll.currentRun.catagory}}
+      h4 tasvideos.org/{{currentPoll.currentRun.id}}.html
       hr
     div.col-md-3
       div(ng-repeat="run in currentPoll.runs")
@@ -17,9 +18,9 @@ block content
         .progress(style="height:20px")
           .progress-bar.progress-bar-striped.progress-bar-info(role='progressbar', aria-valuenow="{{currentPoll.votesPerRun[$index]}}", ng-style="{width : ( currentPoll.votesPerRun[$index] / currentPoll.votesTotal * 100 + '%' ) }") 
       hr 
-      h3 Live at www.TASAttack.com
       h4 Time until next: {{timeLeft | date:'HH:mm:ss' : 'UTC'}}
       h4 Votes to skip: {{currentPoll.skipsTotal}} / {{currentPoll.votesTotal / 2 + 2}}
+      h4 TASAttack.com
       h5 {{currentPoll.currentRun.description}}
       
       
