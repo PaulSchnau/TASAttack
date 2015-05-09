@@ -41,12 +41,16 @@ function createPoll(currentRun){
 
 function endPoll(){
     console.log('Ending Poll');
-    var nextGameIndex = 0;
+    var nextGameIndex = [0];
     for (i = 1; i < currentPoll.votesPerRun.length; i++) {
-        if(currentPoll.votesPerRun[i] > currentPoll.votesPerRun[nextGameIndex]){
-            nextGameIndex = i;
-        }
+	    if(currentPoll.votesPerRun[i] > currentPoll.votesPerRun[nextGameIndex[0]]){
+		    nextGameIndex = [i];
+	    }
+	    else if(currentPoll.votesPerRun[i] == currentPoll.votesPerRun[nextGameIndex[0]]){
+		    nextGameIndex.push(i);
+	    }
     }
+    nextGameIndex = nextGameIndex[Math.floor(Math.random()*nextGameIndex.length)];
     currentPoll.winner = currentPoll.runs[nextGameIndex]._id;
     currentPoll.populate('winner', function(err, newPopulatedPoll){
         createPoll(newPopulatedPoll.winner);
